@@ -1,4 +1,6 @@
 import qs from 'qs'; 
+import { cache } from 'react';
+import { cacheLive } from 'next/cache'; 
 
 // Definición de la estructura JSON para la query de populate [17]
 const queryHomepage = { 
@@ -17,7 +19,8 @@ const queryHomepage = {
     },
 };
 
-async function getHomepage() {
+// Se envuelve la función para cachearla
+const getHomepage = cache(async () => {
     // Transforma el JSON de la query a un string [18]
     const query = qs.stringify(queryHomepage, { encodeValuesOnly: true }); 
     const url = `/api/homepages?${query}`; 
@@ -26,4 +29,7 @@ async function getHomepage() {
     
     // Devuelve directamente los atributos para simplificar el uso en el frontend [18]
     return response.data.attributes; 
-}
+}, {
+    // Configuración del tiempo de vida de la caché (opcional, por defecto son 15 minutos) [10, 24]
+    expire: 60, // Ejemplo: 60 segundos (1 minuto) [24]
+});

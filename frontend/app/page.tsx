@@ -9,3 +9,12 @@ async function HomePage() {
 
   // ... código de renderizado (H1, descripción, etc.) [13]
 }
+
+export async function generateMetadata() {
+  const strapiData = await getHomepage(); // Primera llamada
+
+  return {
+      title: strapiData.title,
+      description: strapiData.description,
+  };
+}
